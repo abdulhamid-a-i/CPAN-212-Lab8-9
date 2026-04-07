@@ -47,7 +47,7 @@ cd ..
 echo.
 echo ==========================================
 echo Platform is starting...
-echo Backend:  https://localhost:5001
+echo Backend:  http://localhost:5001
 echo Frontend: http://localhost:3000
 echo ==========================================
 echo.
