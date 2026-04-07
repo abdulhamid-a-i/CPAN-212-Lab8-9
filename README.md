@@ -1,5 +1,3 @@
-# CPAN-212-Lab8-9
-
 
 ## Project Description
 
@@ -16,8 +14,7 @@ A full-stack insurance platform implemented using the MERN stack. This applicati
 
 4. Install frontend and backend dependencies:
    ```bash
-   npm install
-
+   start-platform.bat or start-platform.sh
 
 ## Certificate Setup Instructions
 
@@ -33,11 +30,18 @@ Node environment, backend port, mongoDB uri, your secret for JWT tokens, JWT exp
 Your base url for Keycloak, the name of your keycloak realm, client id for your backend in keycloak, your client secret, the callback url, the redirect urls for success and failure.
 
 ## Sample Users
-- customer1, agent1
+- customer1
+- agent1
+- admin1
+- underwriter1
+- adjuster1
 
 ## Sample Roles
 - Agent
 - Customer
+- Admin
+- underwriter
+- claims adjuster
 
 ## JWT Usage
 
@@ -47,7 +51,7 @@ JWTs are used to authenticate user requests. The authMiddleware verifies a jwt t
 ## User Profile Module
 
 #### User profiles have two logical layers:
-- The authentication layer
+#### The authentication layer
 - userId
 - Username
 - Password
@@ -85,3 +89,14 @@ For customers:
 - Linked policies cont/references
 - Beneficiary-related field placeholder for life insurance (if needed)
 
+## Protected API routes
+
+API routes are protected using the authentication middleware (authMiddleware) and the authorization middlewares roleMiddleware and ownershipMiddleware.
+
+All routes except authRoutes require authentication (logged in user).
+
+Other routes require specific roles in order to access. 
+
+or example: The get request for the endpoint /claims/review for claims requires either the role of Admin or CLAIMS_ADJUSTER to access. If the authenticated user does not have either role, their request to /claims/review/ will be rejected.
+
+Currently, the ownershipMiddleware is not utilized. But it's method requirePolicyOwnership would require the user either have the roles of Admin or agent for access to a policy without ownership. For the role customer, the middleware would check if the user is the owner of the policy by comparing the policy's customerId and the userId. If it matches, access would be granted. Otherwise an error would be returned. For all other roles, an error 403 would be returned. For any validation errors, an error with the code 500 would be returned.
